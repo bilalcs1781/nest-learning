@@ -18,6 +18,9 @@ export class UserService {
   getOneUser(id: string) {
     return this.userModal.findById(id);
   }
+  findByEmail(email: string) {
+    return this.userModal.findOne({ email });
+  }
   delete(id: string) {
     return this.userModal.findByIdAndDelete(id);
   }

@@ -10,6 +10,8 @@ export class Task {
 
   @Prop()
   email: string;
+  @Prop()
+  password: string;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
