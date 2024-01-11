@@ -11,7 +11,9 @@ import { createUserDto } from 'src/user/dto/user-create.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Taks')
 @Controller('task')
 export class TaskController {
   constructor(private taskService: TaskService) {}
@@ -32,6 +34,7 @@ export class TaskController {
     }),
   )
   handleFileUpload(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
     return 'File Upload Api';
   }
 }
