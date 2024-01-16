@@ -8,8 +8,12 @@ import { createUserDto } from 'src/user/dto/user-create.dto';
 export class TaskService {
   constructor(@InjectModel(Task.name) private taskModal: Model<Task>) {}
 
-  create(createUserDto: createUserDto) {
-    const newUser = new this.taskModal(createUserDto);
+  create(createUserDto: createUserDto, userId: string) {
+    console.log(userId);
+    const newUser = new this.taskModal({ ...createUserDto, userId });
     return newUser.save();
+  }
+  async getTasksByUserId(userId: string): Promise<Task[]> {
+    return this.taskModal.find({ userId: userId }).exec();
   }
 }
