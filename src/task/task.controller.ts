@@ -21,7 +21,7 @@ export class TaskController {
   // @UseGuards(AuthGuard('jwt'))
   @Post()
   store(@Body() createUserDto: createUserDto, @Query('userId') userId: string) {
-    return this.taskService.create(createUserDto);
+    return this.taskService.create(createUserDto, userId);
   }
   @UseGuards(AuthGuard('jwt'))
   @Post('/file')

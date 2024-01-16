@@ -15,8 +15,9 @@ import toStream = require('buffer-to-stream');
 export class TaskService {
   constructor(@InjectModel(Task.name) private taskModal: Model<Task>) {}
 
-  create(createUserDto: createUserDto) {
-    const newUser = new this.taskModal(createUserDto);
+  create(createUserDto: createUserDto, userId: string) {
+    console.log(userId);
+    const newUser = new this.taskModal({ ...createUserDto, userId });
     return newUser.save();
   }
   async uploadImage(
