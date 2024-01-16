@@ -8,10 +8,11 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-  @UseGuards(AuthGuard('local'))
+  // @UseGuards(AuthGuard('local'))
   @Post('/login')
   @ApiOperation({ summary: 'Login User' })
   async login(@Request() req: any) {
-    return this.authService.login(req.user);
+    // console.log(req.body);
+    return this.authService.login(req.body);
   }
 }
