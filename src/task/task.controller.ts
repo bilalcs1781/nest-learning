@@ -12,9 +12,16 @@ import { createUserDto } from 'src/user/dto/user-create.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Taks')
+@ApiBearerAuth()
 @Controller('task')
 export class TaskController {
   constructor(private taskService: TaskService) {}
