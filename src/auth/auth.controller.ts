@@ -12,7 +12,6 @@ export class AuthController {
   @Post('/login')
   @ApiOperation({ summary: 'Login User' })
   async login(@Request() req: any) {
-    // console.log(req.body);
     return this.authService.login(req.body);
   }
 }
