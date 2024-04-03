@@ -6,9 +6,15 @@ import { TaskModule } from './task/task.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { ConfigModule } from '@nestjs/config';
+import { EmailHandlerModule } from './email-handler/email-handler.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot(
       'mongodb+srv://bilal:usman178@atlascluster.zky85co.mongodb.net/nest-learning',
     ),
@@ -16,6 +22,9 @@ import { MulterModule } from '@nestjs/platform-express';
     TaskModule,
     MulterModule.register({ dest: './uploads' }),
     AuthModule,
+    EmailHandlerModule,
+
+    EventsModule,
   ],
   controllers: [],
 })

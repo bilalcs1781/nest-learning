@@ -28,6 +28,10 @@ export class TaskController {
 
     return this.taskService.create(createUserDto, userId);
   }
+  @Get('/email')
+  send() {
+    return this.taskService.sendEmail();
+  }
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async getByUserId(@Request() req: any) {
