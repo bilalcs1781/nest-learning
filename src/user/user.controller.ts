@@ -11,13 +11,14 @@ import {
 import { Request } from 'express';
 import { UserService } from './user.service';
 import { createUserDto } from './dto/user-create.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
+  @ApiOperation({ summary: 'Get all user list' })
   getUsers() {
     return this.userService.get();
   }

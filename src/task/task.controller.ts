@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   Post,
-  Request,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -13,19 +13,22 @@ import { createUserDto } from 'src/user/dto/user-create.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { createTaskDto } from './dto/create-task.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Taks')
+@ApiBearerAuth()
 @Controller('task')
 export class TaskController {
   constructor(private taskService: TaskService) {}
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post()
-  store(@Body() createUserDto: createTaskDto, @Request() req: any) {
-    // createTaskDto.userId = req.user.id;
-    const userId = req.user.id;
-
+  store(@Body() createUserDto: createUserDto, @Query('userId') userId: string) {
     return this.taskService.create(createUserDto, userId);
   }
   @Get('/email')
@@ -33,28 +36,37 @@ export class TaskController {
     return this.taskService.sendEmail();
   }
   @UseGuards(AuthGuard('jwt'))
-  @Get()
-  async getByUserId(@Request() req: any) {
-    const userId = req.user.id;
-
-    // Call your task service to retrieve tasks associated with the user
-    const tasks = await this.taskService.getTasksByUserId(userId);
-    return tasks;
-  }
-
   @Post('/file')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'public/img',
-        filename: (req, file, cb) => {
-          cb(null, file.originalname);
+  // @ApiOperation({ summary: 'Upload file' })
+  // @UseInterceptors(
+  //   FileInterceptor('file', {
+  //     storage: diskStorage({
+  //       destination: 'public/img',
+  //       filename: (req, file, cb) => {
+  //         cb(null, file.originalname);
+  //       },
+  //     }),
+  //   }),
+  // )
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload a file',
+    // type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
         },
-      }),
-    }),
-  )
-  handleFileUpload(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    return 'File Upload Api';
+      },
+    },
+  })
+  @ApiConsumes('multipart/form-data')
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    // console.log(file);
+    const uploadResult = await this.taskService.uploadImage(file);
+    return uploadResult;
   }
 }

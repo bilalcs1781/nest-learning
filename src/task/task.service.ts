@@ -4,6 +4,13 @@ import { Model } from 'mongoose';
 import { EmailHandlerService } from 'src/email-handler/email-handler.service';
 import { Task } from 'src/schemas/task.schema';
 import { createUserDto } from 'src/user/dto/user-create.dto';
+import {
+  UploadApiErrorResponse,
+  UploadApiResponse,
+  v2 as cloudinary,
+  v2,
+} from 'cloudinary';
+import toStream = require('buffer-to-stream');
 
 @Injectable()
 export class TaskService {
@@ -17,8 +24,17 @@ export class TaskService {
     const newUser = new this.taskModal({ ...createUserDto, userId });
     return newUser.save();
   }
-  async getTasksByUserId(userId: string): Promise<Task[]> {
-    return this.taskModal.find({ userId: userId }).exec();
+  async uploadImage(
+    file: Express.Multer.File,
+  ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    return new Promise((resolve, reject) => {
+      const upload = v2.uploader.upload_stream((error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      });
+
+      toStream(file.buffer).pipe(upload);
+    });
   }
   async sendEmail(): Promise<{ message: string }> {
     // return this.taskModal.find({ userId: userId }).exec();
