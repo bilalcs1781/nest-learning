@@ -9,6 +9,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule } from '@nestjs/config';
 import { EmailHandlerModule } from './email-handler/email-handler.module';
 import { EventsModule } from './events/events.module';
+import { CoinsModule } from './coins/coins.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -25,6 +27,10 @@ import { EventsModule } from './events/events.module';
     EmailHandlerModule,
 
     EventsModule,
+
+    CoinsModule,
+
+    ChatModule,
   ],
   controllers: [],
 })
